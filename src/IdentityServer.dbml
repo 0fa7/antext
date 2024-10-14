@@ -1,0 +1,23 @@
+
+Table open_ids
+{
+  open_id varchar [primary key]
+}
+
+Table user_info
+{
+    open_id varchar
+}
+
+Table user_tokens
+{
+  open_id varchar
+  access_token varchar
+  token_type varchar
+  token varchar
+  matrix_server_name varchar
+  expires_at timestamp
+}
+
+Ref: open_ids.open_id > user_info.open_id 
+Ref: open_ids.open_id > user_tokens.open_id

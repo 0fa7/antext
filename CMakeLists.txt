@@ -5,9 +5,6 @@ project(antext)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-include_directories(C:/dev/include 
-    C:/dev/Crow/include)
-link_directories(C:/dev/lib)
 
 find_package(Crow REQUIRED)
 find_package(Boost REQUIRED)

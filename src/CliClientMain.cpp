@@ -1,19 +1,18 @@
 #include <iostream>
 #include <string>
-#include "WindowsPlatform.hpp"
+#include "LinuxPlatform.hpp"
 
 class ClientContext
 {
 public:
     ClientContext(){};
     ~ClientContext(){};
-    std::string username_ = "test-user";
+    std::string username_ = "I 😍 Ω";
 };
 
 int main()
 {
-    EnableUtf8Terminal();
     ClientContext c;
-    
+
     std::cout << c.username_ << std::endl;
 }
