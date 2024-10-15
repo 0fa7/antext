@@ -1,14 +1,14 @@
 set(ANTEXT_CLI_CLIENT_SOURCES
-    CliClientMain.cpp)
+    cli_client.cpp)
 
 add_executable(cli_client
     ${ANTEXT_CLI_CLIENT_SOURCES})
 
 set(ANTEXT_IDENTITY_SERVER_SOURCES
-    IdentityServerMain.cpp)
+    ws_server.cpp)
 
-add_executable(identity_server
+add_executable(ws_server
     ${ANTEXT_IDENTITY_SERVER_SOURCES})
 
-target_link_libraries(identity_server
+target_link_libraries(ws_server
     sqlite3)
