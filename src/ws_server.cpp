@@ -29,6 +29,8 @@ int main() {
       .onmessage([&](crow::websocket::connection & /*conn*/,
                      const std::string &data, bool is_binary) {
         std::lock_guard<std::mutex> _(mtx);
+
+        std::cout << "message: " << data << std::endl;
         for (auto u : users)
           if (is_binary)
             u->send_binary(data);
