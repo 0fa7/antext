@@ -8,6 +8,7 @@
 #include <mutex>
 #include <string>
 #include <thread>
+#include "mt_work_queue.hpp"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -19,6 +20,7 @@ std::string port = "8080";
 std::mutex ws_write_mutex;
 std::mutex ws_read_mutex;
 
+mt_work_queue wq;
 
 void input_thread(websocket::stream<tcp::socket> &ws) {
 
