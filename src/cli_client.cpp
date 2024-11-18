@@ -3,12 +3,13 @@
 #include <boost/beast/core.hpp>
 #include <boost/beast/core/buffers_to_string.hpp>
 #include <boost/beast/websocket.hpp>
+#include <cstdint>
 #include <cstdlib>
 #include <iostream>
 #include <mutex>
 #include <string>
 #include <thread>
-#include "mt_work_queue.hpp"
+#include "spsc_queue.hpp"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -20,7 +21,9 @@ std::string port = "8080";
 std::mutex ws_write_mutex;
 std::mutex ws_read_mutex;
 
-mt_work_queue wq;
+spsc_queue<int64_t> wq;
+
+int counter = 1;
 
 void input_thread(websocket::stream<tcp::socket> &ws) {
 
@@ -31,6 +34,7 @@ void input_thread(websocket::stream<tcp::socket> &ws) {
     {
       std::lock_guard<std::mutex> ws_lock(ws_write_mutex);
       ws.write(net::buffer(line));
+      wq.push(counter++);
     }
 
   }
@@ -43,6 +47,16 @@ void output_thread(websocket::stream<tcp::socket> &ws) {
     {
       std::lock_guard<std::mutex> ws_lock(ws_read_mutex);
       ws.read(buffer);
+      int64_t item;
+      bool res = wq.try_pop(item);
+
+      if(res)
+      {
+        std::cout << "item: " <<  item << std::endl;
+      }
+      else {
+          std::cout << "no item" << std::endl;
+      }
     }
     
     std::cout << "recieved: " << beast::make_printable(buffer.data())

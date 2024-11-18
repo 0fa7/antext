@@ -1,6 +1,5 @@
 set(ANTEXT_CLI_CLIENT_SOURCES
-  cli_client.cpp
-  mt_work_queue.cpp)
+  cli_client.cpp)
 
 add_executable(cli_client
   ${ANTEXT_CLI_CLIENT_SOURCES})
