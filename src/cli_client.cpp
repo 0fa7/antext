@@ -10,6 +10,7 @@
 #include <string>
 #include <thread>
 #include "spsc_queue.hpp"
+#include "mpmc_waitable_queue.hpp"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -21,7 +22,7 @@ std::string port = "8080";
 std::mutex ws_write_mutex;
 std::mutex ws_read_mutex;
 
-spsc_queue<int64_t> wq;
+mpmc_waitable_queue<int64_t> wq;
 
 int counter = 1;
 
@@ -48,15 +49,8 @@ void output_thread(websocket::stream<tcp::socket> &ws) {
       std::lock_guard<std::mutex> ws_lock(ws_read_mutex);
       ws.read(buffer);
       int64_t item;
-      bool res = wq.try_pop(item);
-
-      if(res)
-      {
-        std::cout << "item: " <<  item << std::endl;
-      }
-      else {
-          std::cout << "no item" << std::endl;
-      }
+      wq.wait_pop(item);
+      std::cout << "item: " <<  item << std::endl;
     }
     
     std::cout << "recieved: " << beast::make_printable(buffer.data())
